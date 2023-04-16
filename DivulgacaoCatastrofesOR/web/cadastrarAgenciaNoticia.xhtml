@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template.xhtml">
+    <ui:define name="conteudo">
+        <h2>Cadastrar Agência de notícias</h2>
+        <p:panel header="Agências de notícias">  
+            <p:outputPanel id="agenciaNoticias">
+                <p:dataTable id="dataTable" var="agenciaNoticias"
+                             value="#{agenciaNoticiasBean.all}"
+                             widgetVar="tabelaAgenciaNoticias"
+                             emptyMessage="Nenhum registro encontrado"
+                             filteredValue="#{agenciaNoticiasBean.catastrofesFiltrados}">
+                    <p:column headerText="Nome" filterBy="nome" footerText="startsWith">  
+                        <h:outputText value="#{agenciaNoticias.nome}" />  
+                    </p:column>
+                    <p:column headerText="Cnpj" filterBy="cnpj" footerText="startsWith">  
+                        <h:outputText value="#{agenciaNoticias.cnpj}" />  
+                    </p:column>
+                    <p:column filterBy="governamental"
+                              headerText="Governamental" footerText="exact"
+                              filterOptions="#{agenciaNoticiasBean.getGovernamental(true)}"
+                              filterMatchMode="exact">
+                        <h:outputText value="#{agenciaNoticias.governamental}" />
+                    </p:column>
+                    <p:column filterBy="formato"
+                              headerText="Formato" footerText="exact"
+                              filterOptions="#{agenciaNoticiasBean.getEstadosCivis(true)}"
+                              filterMatchMode="exact">
+                        <h:outputText value="#{agenciaNoticias.formato}" />
+                    </p:column>
+                    <p:column headerText="Cidade" filterBy="cidade" footerText="startsWith">  
+                        <h:outputText value="#{agenciaNoticias.cidade}" />  
+                    </p:column>
+                    <p:column headerText="Ação">  
+                        <p:commandButton value="Consutar"
+                                         actionListener="#{agenciaNoticiasBean.consultar(agenciaNoticias)}"
+                                         oncomplete="panelAgenciaNoticia.show();"
+                                         update=":form:displayAgenciaNoticia" /> 
+                    </p:column>
+                </p:dataTable>
+                <p:panel>
+                    <p:commandButton value="Cadastrar"
+                                     actionListener="#{agenciaNoticiasBean.inserir()}"
+                                     oncomplete="panelAgenciaNoticia.show();"
+                                     update=":form:displayAgenciaNoticia" />   
+                </p:panel>
+            </p:outputPanel>
+        </p:panel>
+        <p:panel header="Dados do AgenciaNoticia" id="dadosAgenciaNoticia" widgetVar="panelAgenciaNoticia"
+                 visible="false" closable="true" style="margin-top:10px;">
+            <p:messages id="erroAgenciaNoticia"/>
+            <h:panelGrid id="displayAgenciaNoticia" columns="1" styleClass="grid">
+                <p:panel>
+                    <p:wizard
+                        flowListener="#{agenciaNoticiasBean.onFlowProcess}"
+                        backLabel="Anterior"
+                        nextLabel="Proximo">
+                        <p:tab id="dadosPessoais" title="1. Dados Pessoais">
+                            <p:panel header="Dados Pessoais">
+                                <h:panelGrid columns="3" columnClasses="label, value" styleClass="grid">
+
+                                    <h:outputText value="Nome *" />
+                                    <p:inputText id="nomeInputText" required="false" label="Nome"
+                                                 value="#{agenciaNoticiasBean.value.nome}" styleClass="ipt-large" />
+                                    <p:message for="nomeInputText" />
+                                    <h:outputText value="Cnpj *" />
+                                    <p:inputText id="cnpjInputText" required="false" label="Cnpj"
+                                                 value="#{agenciaNoticiasBean.value.cnpj}" styleClass="ipt-large" />
+                                    <p:message for="cnpjInputText" />
+                                    <h:outputText value="Governamental *" />
+                                    <p:selectOneRadio id="governamentalselectOneRadio"
+                                                      value="#{agenciaNoticiasBean.value.governamental}"
+                                                      required="false" label="Governamental" style="width:100px">
+                                        <f:selectItems value="#{agenciaNoticiasBean.getGovernamental(false)}" />
+                                    </p:selectOneRadio>
+                                    <p:message for="governamentalselectOneRadio" />
+                                    <h:outputText value="Formato *" />
+                                    <p:selectOneMenu id="formatoSelectOneMenu"
+                                                     value="#{agenciaNoticiasBean.value.formato}"
+                                                     required="false" label="Formato" style="width:100px">
+                                        <f:selectItems value="#{agenciaNoticiasBean.getEstadosCivis(false)}" />
+                                    </p:selectOneMenu>
+                                    <p:message for="formatoSelectOneMenu" />
+                                    <h:outputText value="Data de Abertura *" />
+                                    <p:inputMask id="dataAberturaInputMask" required="false"
+                                                 label="Data de Abertura" mask="99/99/9999"
+                                                 value="#{agenciaNoticiasBean.value.dataAbertura}">
+                                        <f:convertDateTime pattern="dd/mm/yyyy" locale="pt_BR"/>
+                                    </p:inputMask>
+                                    <p:message for="dataAberturaInputMask" />
+                                    <h:outputText value="Cidade *" />
+                                    <p:inputText id="cidadeInputText" required="false" label="Cidade"
+                                                 value="#{agenciaNoticiasBean.value.cidade}" styleClass="ipt-large" />
+                                    <p:message for="cidadeInputText" />
+                                </h:panelGrid>  
+                            </p:panel>
+                        </p:tab>
+                        <p:tab id="contatos" title="2. Contatos">
+                            <p:panel header="Contatos">
+                                <h:panelGrid columns="3" columnClasses="label, value" styleClass="grid">
+                                    <h:outputText value="Email: " />
+                                    <p:inputText id="emailInputText" required="false" label="Email"
+                                                 value="#{agenciaNoticiasBean.value.email}" styleClass="ipt-large" />
+                                    <p:message for="emailInputText" />
+                                    <h:outputText value="WhatsApp: " />
+                                    <p:inputText id="whatsappInputText" required="false" label="WhatsApp"
+                                                 value="#{agenciaNoticiasBean.value.whatsapp}" styleClass="ipt-large" />
+                                    <p:message for="whatsappInputText" />
+                                    <h:outputText value="Facebook: " />
+                                    <p:inputText id="facebooklInputText" required="false" label="Facebook"
+                                                 value="#{agenciaNoticiasBean.value.facebook}" styleClass="ipt-large" />
+                                    <p:message for="facebooklInputText" />
+                                    <h:outputText value="Instagram: " />
+                                    <p:inputText id="instagramInputText" required="false" label="Instagram"
+                                                 value="#{agenciaNoticiasBean.value.instagram}" styleClass="ipt-large" />
+                                    <p:message for="instagramInputText" />
+                                </h:panelGrid>  
+                            </p:panel>
+                        </p:tab>
+                    </p:wizard>
+                    <h:panelGroup rendered="#{!agenciaNoticiasBean.consultar}">
+                        <p:commandButton value="Inserir" action="#{agenciaNoticiasBean.save()}" ajax="false" icon="ui-icon-circle-plus"/>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{agenciaNoticiasBean.consultar}">
+                        <p:commandButton value="Alterar" action="#{agenciaNoticiasBean.update()}" ajax="false" icon="ui-icon-pencil"/>
+                        <p:commandButton value="Remover" action="#{agenciaNoticiasBean.delete()}" ajax="false" icon="ui-icon-circle-minus"/>
+                    </h:panelGroup>
+                </p:panel>
+            </h:panelGrid>  
+        </p:panel>
+    </ui:define>
+</ui:composition>

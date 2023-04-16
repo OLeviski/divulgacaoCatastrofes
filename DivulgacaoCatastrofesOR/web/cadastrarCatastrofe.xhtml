@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template.xhtml">
+    <ui:define name="conteudo">
+        <h2>Cadastrar Catastrofes</h2>
+        <p:panel header="Catástrofes Cadastradas">  
+            <p:outputPanel id="catastrofe">
+                <p:dataTable id="dataTable" var="catastrofe"
+                             value="#{catastrofeBean.all}"
+                             widgetVar="tabelaCatastrofes"
+                             emptyMessage="Nenhum registro encontrado"
+                             filteredValue="#{catastrofeBean.catastrofesFiltrados}">
+
+                    <p:column headerText="Área" filterBy="area" footerText="startsWith">  
+                        <h:outputText value="#{catastrofe.area}" />  
+                    </p:column>
+
+                    <p:column headerText="Criminal">  
+                        <h:outputText value="#{catastrofe.criminal}" />  
+                    </p:column>
+
+                    <p:column filterBy="catastrofes"
+                              headerText="Catástrofe" footerText="exact"
+                              filterOptions="#{catastrofeBean.getCatastrofes(true)}"
+                              filterMatchMode="exact">
+                        <h:outputText value="#{catastrofe.catastrofes}" />
+                    </p:column>
+                    
+                    <h:outputText value="#{catastrofe.catastrofes}" />
+
+                    <p:column headerText="Ação">  
+                        <p:commandButton value="Consutar"
+                                         actionListener="#{catastrofeBean.consultar(catastrofe)}"
+                                         oncomplete="panelCatastrofe.show();"
+                                         update=":form:displayCatastrofe" /> 
+                    </p:column>
+                </p:dataTable>
+                <p:panel>
+                    <p:commandButton value="Cadastrar"
+                                     actionListener="#{catastrofeBean.inserir()}"
+                                     oncomplete="panelCatastrofe.show();"
+                                     update=":form:displayCatastrofe" />   
+                </p:panel>
+            </p:outputPanel>
+        </p:panel>
+        <p:panel header="Dados da Catástrofe" id="dadosCatastrofe" widgetVar="panelCatastrofe"
+                 visible="false" closable="true" style="margin-top:10px;">
+            <p:messages id="erroCatastrofe"/>
+            <h:panelGrid id="displayCatastrofe" columns="1" styleClass="grid">
+                <p:panel>
+                    <p:tab id="dadosPessoais" title="1. Dados Pessoais">
+                        <p:panel header="Dados Pessoais">
+                            <h:panelGrid columns="3" columnClasses="label, value" styleClass="grid">
+
+                                <h:outputText value="Área *" />
+                                <p:inputText id="areaInputText" required="false" label="Area"
+                                             value="#{catastrofeBean.value.area}" styleClass="ipt-large" />
+                                <p:message for="areaInputText" />
+
+                                <h:outputText value="Criminal: *" />  
+                                <p:selectBooleanCheckbox id="criminalSelectBooleanCheckbox"
+                                                         value="#{catastrofeBean.value.criminal}" />
+                                <p:message for="criminalSelectBooleanCheckbox"/>
+
+                                <h:outputText value="Catástrofe *" />
+                                <p:selectOneMenu id="catastrofeSelectOneMenu"
+                                                 value="#{catastrofeBean.value.catastrofes}"
+                                                 required="false" label="Catastrofe" style="width:100px">
+                                    <f:selectItems value="#{catastrofeBean.getCatastrofes(false)}" />
+                                </p:selectOneMenu>
+                                <p:message for="catastrofeSelectOneMenu" />
+
+                                <h:outputText value="Data da Catástrofe *" />
+                                <p:inputMask id="dataCatastrofeInputMask" required="false"
+                                             label="Data da Catastrofe" mask="99/99/9999"
+                                             value="#{catastrofeBean.value.dataCatastrofe}">
+                                    <f:convertDateTime pattern="dd/mm/yyyy" locale="pt_BR"/>
+                                </p:inputMask>
+                                <p:message for="dataCatastrofeInputMask" />
+                            </h:panelGrid>  
+                        </p:panel>
+                    </p:tab>
+                    <h:panelGroup rendered="#{!catastrofeBean.consultar}">
+                        <p:commandButton value="Inserir" action="#{catastrofeBean.save()}" ajax="false" icon="ui-icon-circle-plus"/>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{catastrofeBean.consultar}">
+                        <p:commandButton value="Alterar" action="#{catastrofeBean.update()}" ajax="false" icon="ui-icon-pencil"/>
+                        <p:commandButton value="Remover" action="#{catastrofeBean.delete()}" ajax="false" icon="ui-icon-circle-minus"/>
+                    </h:panelGroup>
+                </p:panel>
+            </h:panelGrid>  
+        </p:panel>
+    </ui:define>
+</ui:composition>

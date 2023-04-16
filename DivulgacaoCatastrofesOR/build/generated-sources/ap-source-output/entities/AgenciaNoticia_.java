@@ -1,0 +1,25 @@
+package entities;
+
+import entities.AgenciaNoticia.Formato;
+import java.util.Date;
+import javax.annotation.Generated;
+import javax.persistence.metamodel.SingularAttribute;
+import javax.persistence.metamodel.StaticMetamodel;
+
+@Generated(value="EclipseLink-2.6.1.v20150916-rNA", date="2023-03-22T13:35:04")
+@StaticMetamodel(AgenciaNoticia.class)
+public class AgenciaNoticia_ { 
+
+    public static volatile SingularAttribute<AgenciaNoticia, String> whatsapp;
+    public static volatile SingularAttribute<AgenciaNoticia, String> cidade;
+    public static volatile SingularAttribute<AgenciaNoticia, Formato> formato;
+    public static volatile SingularAttribute<AgenciaNoticia, String> facebook;
+    public static volatile SingularAttribute<AgenciaNoticia, String> nome;
+    public static volatile SingularAttribute<AgenciaNoticia, String> cnpj;
+    public static volatile SingularAttribute<AgenciaNoticia, String> governamental;
+    public static volatile SingularAttribute<AgenciaNoticia, String> instagram;
+    public static volatile SingularAttribute<AgenciaNoticia, Long> id;
+    public static volatile SingularAttribute<AgenciaNoticia, String> email;
+    public static volatile SingularAttribute<AgenciaNoticia, Date> dataAbertura;
+
+}
