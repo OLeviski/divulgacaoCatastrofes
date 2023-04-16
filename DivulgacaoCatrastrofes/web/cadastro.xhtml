@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <f:facet name="first">
+            <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+            <title>Visualização e Cadastro de Queimadas</title>
+        </f:facet>
+        <h:outputStylesheet name="style.css" library="css"/>
+        <h:outputStylesheet name="default.css" library="css"/>
+        <h:outputStylesheet name="overrides.css" library="css"/>
+    </h:head> 
+    <h:body>
+        <h3>Cadastro de Queimadas</h3>
+        <h:form>
+            <h:panelGrid columns="3" style="height:100px;width:500px;">
+                
+                <h:outputText value="Localizacao *"/>
+                <h:inputText id="localizacaoInputText" required="true"
+                             value="#{divulgacaoCatrastrofesDBBean.queimada.localizacao}"
+                             requiredMessage="localizacao não preenchido"/>
+                <h:message for="localizacaoInputText" styleClass="mensagem_erro"/>
+                
+                <h:outputText value="Area m2 *"/>
+                <h:inputText id="areaInputText" required="true"
+                             value="#{divulgacaoCatrastrofesDBBean.queimada.area}"
+                             requiredMessage="area não preenchida"/>
+                <h:message for="areaInputText" styleClass="mensagem_erro"/>
+                
+                <h:outputText value="Ano *"/>
+                <h:inputText id="anoInputText" required="true"
+                             value="#{divulgacaoCatrastrofesDBBean.queimada.ano}"
+                             requiredMessage="formato de ano incorreto">
+                    <f:validateRegex pattern="\d{4}"/>
+                </h:inputText>
+                <h:message for="anoInputText" styleClass="mensagem_erro"/>
+                
+                <h:outputText value="Causa *"/>
+                <h:selectOneMenu id="causaSelectOneMenu" required="true"
+                                 value="#{divulgacaoCatrastrofesDBBean.queimada.causa}"
+                                 requiredMessage="causa não seleceionada">
+                    <f:selectItem itemValue="raio" itemLabel="Raios" />
+                    <f:selectItem itemValue="incendiario" itemLabel="Incendiários" />
+                    <f:selectItem itemValue="limpeza" itemLabel="Queimadas para limpeza" />
+                    <f:selectItem itemValue="fumante" itemLabel="Fumantes" />
+                    <f:selectItem itemValue="campestre" itemLabel="Fogos campestres" />
+                    <f:selectItem itemValue="florestais" itemLabel="Operações florestais" />
+                    <f:selectItem itemValue="ferro" itemLabel="Estradas de ferro" />
+                    <f:selectItem itemValue="diversos" itemLabel="Diversos" />
+                </h:selectOneMenu>
+                <h:message for="assuntoSelectOneMenu" styleClass="mensagem_erro"/>
+                <h:outputText value="Queimada Criminal *"/>
+                <h:selectOneRadio id="criminalSelectOneRadio" required = "true"
+                                  value="#{divulgacaoCatrastrofesDBBean.queimada.criminal}"
+                                  requiredMessage="opçao para Queimada criminal nao selecionado">
+                    <f:selectItem itemValue="sim" itemLabel="Sim" />
+                    <f:selectItem itemValue="nao" itemLabel="Não" />
+                    <f:selectItem itemValue="em investigacao" itemLabel="Em investigação" />
+                </h:selectOneRadio>
+                <h:message for="criminalSelectOneRadio" styleClass="mensagem_erro"/>
+            </h:panelGrid>
+            <h:panelGrid>
+                <h:commandButton value="Inserir" action="#{divulgacaoCatrastrofesDBBean.cadastrarQueimada()}"/>
+            </h:panelGrid>
+            <p><h:outputLink value="index.xhtml">Visualizar Queimadas</h:outputLink></p>
+        </h:form>
+    </h:body>
+</html>

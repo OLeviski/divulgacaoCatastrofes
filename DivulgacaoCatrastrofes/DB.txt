@@ -1,0 +1,9 @@
+CREATE DATABASE queimadas
+
+CREATE TABLE Queimadas(
+    Localizacao VARCHAR(45),
+    Area VARCHAR(45), 
+    Ano VARCHAR(4), 
+    causa VARCHAR(20), 
+    criminal VARCHAR(20)
+);
