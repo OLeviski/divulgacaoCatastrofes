@@ -27,19 +27,6 @@ public class AgenciaNoticia implements Serializable, PersistentEntity {
             return this.label;
         }
     };
-    
-    public enum Governamental {
-        sim("Sim"), nao("Não");
-        private final String label;
-
-        private Governamental(String label) {
-            this.label = label;
-        }
-
-        public String getLabel() {
-            return this.label;
-        }
-    };
 
     private String nome;
     private String cnpj;

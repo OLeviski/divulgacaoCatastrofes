@@ -6,8 +6,11 @@ import javax.persistence.PersistenceContext;
 
 @Stateless
 public class EntityFinder {
+
     @PersistenceContext(unitName = "DivulgacaoCatastrofeORPU")
     private EntityManager em;
 
-    public Object find(Class type, Object id) { return em.find(type, id); }
+    public Object find(Class type, Object id) {
+        return em.find(type, id);
+    }
 }

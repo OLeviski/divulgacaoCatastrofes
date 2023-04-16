@@ -126,20 +126,19 @@ public class AgenciaNoticiaBean implements Serializable {
         }
         return items;
     }
-
+    
     public SelectItem[] getGovernamental(boolean filtrar) {
         SelectItem[] items;
-        int length = AgenciaNoticia.Governamental.values().length;
+
         int n = 0;
         if (filtrar) {
-            items = new SelectItem[length + 1];
+            items = new SelectItem[3];
             items[0] = new SelectItem("", "");
             n++;
-        } else {
-            items = new SelectItem[length];
-        }
-        for (AgenciaNoticia.Governamental governamental : AgenciaNoticia.Governamental.values()) {
-            items[n++] = new SelectItem(governamental, governamental.getLabel());
+        } else 
+            items = new SelectItem[2];{
+        items[n ++] = new SelectItem("sim", "Sim");
+        items[n] = new SelectItem("nao", "Nao");
         }
         return items;
     }

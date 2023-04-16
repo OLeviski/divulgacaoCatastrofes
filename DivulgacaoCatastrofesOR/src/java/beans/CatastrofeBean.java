@@ -126,5 +126,7 @@ public class CatastrofeBean implements Serializable {
         return items;
     }
 
-
+    public List<Catastrofe> completaCatastrofe(String prefixo) {
+        return catastrofesService.filter(prefixo);
+    }
 }

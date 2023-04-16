@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template.xhtml">
+
+    <ui:define name="conteudo">
+
+        <h2>Cadastrar Noticias</h2>
+
+        <p:panel header="Noticias Cadastradas"> 
+
+            <p:outputPanel id="noticia">
+
+                <p:dataTable id="dataTable" var="noticia"
+                             value="#{noticiaBean.all}"
+                             widgetVar="tabelaNoticias"
+                             emptyMessage="Nenhum registro encontrado"
+                             filteredValue="#{noticiaBean.noticiaFiltrados}">
+                    <p:column filterBy="titulo" headerText="Titulo" footerText="">  
+                        <h:outputText value="#{noticia.titulo}" />  
+                    </p:column>
+                    <p:column filterBy="agenciaNoticia" headerText="Nome do Agencia" footerText="startsWith">
+                        <h:outputText value="#{noticia.agenciaNoticia.nome}"/>
+                    </p:column>
+                    <p:column filterBy="formato"
+                              headerText="Formato" footerText="exact"
+                              filterOptions="#{noticiaBean.getFormatos(true)}"
+                              filterMatchMode="exact">
+                        <h:outputText value="#{noticia.formato}" />
+                    </p:column>
+                    <p:column filterBy="melhorNoticia"
+                              headerText="Melhor Noticia" footerText="exact"
+                              filterOptions="#{noticiaBean.getOptionsMelhorNoticia()}"
+                              filterMatchMode="exact">
+                        <h:outputText value="#{noticia.melhorNoticia?'sim':'nao'}"/>
+                    </p:column>
+                    <p:column headerText="Data e Hora">
+                        <h:outputText value="#{noticia.dataHora}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="pt_BR"/>
+                        </h:outputText>
+                    </p:column> 
+                    <p:column id="colunaAcao" headerText="Ação">  
+                        <p:commandButton value="Consutar"
+                                         actionListener="#{noticiaBean.consultar(noticia)}"
+                                         oncomplete="panelNoticia.show();"
+                                         update=":form:displayNoticia" /> 
+                    </p:column>
+                </p:dataTable>
+                <p:panel>
+                    <p:commandButton value="Cadastrar"
+                                     actionListener="#{noticiaBean.inserir()}"
+                                     oncomplete="panelNoticia.show();"
+                                     update=":form:displayNoticia" />   
+                </p:panel>
+            </p:outputPanel>
+        </p:panel>
+        <p:panel header="Dados do Noticia" id="dadosNoticia" widgetVar="panelNoticia"
+                 visible="false" closable="true" style="margin-top:10px;">
+            <p:messages id="erroNoticia"/>
+            <h:panelGrid id="displayNoticia" columns="1" styleClass="grid">
+                <p:panel>
+                    <h:panelGrid columns="3" columnClasses="label, value" styleClass="grid">
+                        <h:outputText value="Titulo: *" />
+                        <p:inputText id="tituloInputText" required="false" label="Titulo"
+                                     value="#{noticiaBean.value.titulo}" styleClass="ipt-large" />
+                        <p:message for="tituloInputText" />
+                        
+                        
+                        <h:outputText value="Agencia *" />
+                        <p:selectOneMenu id="agenciaSelectOneMenu" value="#{noticiaBean.value.agenciaNoticia}"
+                                         required="false" label="cliente" style="width:300px">
+                            <f:selectItems value="#{agenciaNoticiasBean.all}" />
+                        </p:selectOneMenu>
+                        <p:message for="agenciaSelectOneMenu" />
+                        
+                        
+                        <h:outputText value="Formato *" /> 
+                        <p:selectOneMenu id = "formatoSelectOneMenu" value ="#{noticiaBean.value.formato}" 
+                                         required="false" label= "Formato " style="width:100px">
+                            <f:selectItems value="#{noticiaBean.getFormatos(false)}"/> 
+                        </p:selectOneMenu> 
+                        <p:message for="formatoSelectOneMenu"/> 
+                        <h:outputText value="Melhor Noticia: *"/> 
+                        <p:selectBooleanCheckbox id="melhorNoticiaSelectBooleanCheckbox" 
+                                                 value="#{noticiaBean.value.melhorNoticia}" /> 
+                        <p:message for ="melhorNoticiaSelectBooleanCheckbox" /> 
+                        <h:outputText value="Catastrofes: *" />
+                        <p:autoComplete id ="catastrofeAutoComplete" value="#{noticiaBean.value.catastrofees}" 
+                                        completeMethod="#{catastrofeBean.completaCatastrofe}" multiple="true"
+                                        converter="#{catastrofeConverter}"
+                                        var="catastrofe" itemValue="#{catastrofe}" itemLabel="#{catastrofe.area}" />
+                        <p:message for="catastrofeAutoComplete" />       
+                    </h:panelGrid>
+                </p:panel>
+                <h:panelGroup rendered="#{!noticiaBean.consultar}">
+                    <p:commandButton value="Inserir" action="#{noticiaBean.save()}" ajax="false" icon="ui-icon-circle-plus"/>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{noticiaBean.consultar}">
+                    <p:commandButton value="Alterar" action="#{noticiaBean.update()}" ajax="false" icon="ui-icon-pencil"/>
+                    <p:commandButton value="Remover" action="#{noticiaBean.delete()}" ajax="false" icon="ui-icon-circle-minus"/>
+                </h:panelGroup>
+            </h:panelGrid>
+        </p:panel>
+    </ui:define>
+</ui:composition>

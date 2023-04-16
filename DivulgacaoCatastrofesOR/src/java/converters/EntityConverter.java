@@ -22,7 +22,7 @@ public abstract class EntityConverter<T> implements Converter {
     private EntityFinder lookupEntityFinder() {
         try {
             Context c = new InitialContext();
-            return (EntityFinder) c.lookup("java:global/ClubeCinemaOR/EntityFinder!services.EntityFinder");
+            return (EntityFinder) c.lookup("java:global/DivulgacaoCatastrofesOR/EntityFinder!services.EntityFinder");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
